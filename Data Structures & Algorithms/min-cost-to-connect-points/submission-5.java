@@ -1,0 +1,37 @@
+class Solution {
+    public int minCostConnectPoints(int[][] points) {
+        int n = points.length;
+        int[] minDist = new int[n];
+        boolean[] visited = new boolean[n];
+
+        Arrays.fill(minDist, Integer.MAX_VALUE);
+        minDist[0] = 0;
+
+        int cost = 0;
+
+        for (int i = 0; i < n; i++) {
+            int u = -1;
+
+            // pick the unvisited node with smallest minDist
+            for (int j = 0; j < n; j++) {
+                if (!visited[j] && (u == -1 || minDist[j] < minDist[u])) {
+                    u = j;
+                }
+            }
+
+            visited[u] = true;
+            cost += minDist[u];
+
+            // update distances to all other nodes
+            for (int v = 0; v < n; v++) {
+                if (!visited[v]) {
+                    int d = Math.abs(points[u][0] - points[v][0]) +
+                            Math.abs(points[u][1] - points[v][1]);
+                    minDist[v] = Math.min(minDist[v], d);
+                }
+            }
+        }
+
+        return cost;
+    }
+}
